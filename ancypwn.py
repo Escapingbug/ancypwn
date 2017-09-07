@@ -115,6 +115,11 @@ def run_pwn(args):
     """Runs a pwn thread
     Just sets needed docker arguments and run it
     """
+    if not args.directory.startswith('~') and \
+            not args.directory.startswith('/'):
+                # relative path
+        args.directory = os.path.abspath(args.directory)
+
     if not os.path.exists(args.directory):
         raise FileNotFoundError('No such directory')
 
