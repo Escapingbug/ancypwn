@@ -130,7 +130,7 @@ def run_pwn(args):
     running_container = container.run(
         'ancypwn',
         '/bin/bash',
-        cap_add=['SYS_ADMIN'],
+        cap_add=['SYS_ADMIN', 'SYS_PTRACE'],
         detach=True,
         tty=True,
         volumes={
@@ -168,7 +168,9 @@ def end_pwn(args):
     """
     container_name = _read_container_name()
     conts = container.list(filters={'name':container_name})
-    assert len(conts) == 1
+    if len(conts) < 1:
+        os.remove(EXIST_FLAG)
+        raise Exception('No pwn thread running, corrupted meta info file, deleted')
     conts[0].stop()
     os.remove(EXIST_FLAG)
 
