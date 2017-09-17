@@ -7,9 +7,11 @@ Currently, this can only run under linux environment. So the goal of this projec
 wants to do finish some CTF pwn challenges, especially who doesn't use ubuntu but other distributions which is not used widely as pwn server.
 
 This docker image provide:
-* debug version libc and its source under ubuntu
 * gef
 * pwntools
+* keystone assmebler
+* capstone disassembler
+* glibc source and debug version glibc(so we can debug libc with source)
 
 Nothing else for now, and it is sufficient most of the time. If you have some suggestion of what is needed or how to make this image smaller, 
 it is welcome to comment an issue.

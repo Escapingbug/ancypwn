@@ -138,7 +138,8 @@ def run_pwn(args):
                 'bind': '/pwn',
                 'mode': 'rw'
             }
-        }
+        },
+        net='host'
     )
 
     # Set flag, save the container id
