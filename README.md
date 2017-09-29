@@ -12,6 +12,8 @@ This docker image provide:
 * keystone assmebler
 * capstone disassembler
 * glibc source and debug version glibc(so we can debug libc with source)
+* Ropper
+* ROPGadgets
 
 Nothing else for now, and it is sufficient most of the time. If you have some suggestion of what is needed or how to make this image smaller, 
 it is welcome to comment an issue.

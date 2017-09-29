@@ -20,31 +20,34 @@ RUN apt-get update && \
     python-capstone && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+RUN cd ~ && git clone https://github.com/keystone-engine/keystone.git && \
+    cd keystone && \
+    mkdir build && cd ~/keystone/build && ../make-share.sh && \
+    make install && \
+    cd /tmp && \
+    echo "/usr/local/lib" >> /etc/ld.so.conf && \
+    ldconfig && rm -rf ~/keystone && \
+    pip install keystone-engine
+
+# the apt-get on top is too huge, seperate a little
+RUN apt-get update && \
+    DEBIAN_FRONTEND=noninteractive apt-get install -qy \
+    socat \
+    netcat && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*  && \
+    pip install git+https://github.com/Escapingbug/roputils.git
+
 # pip, pwntools, ropper
+# These things may update
 RUN pip install -U pip && \
     pip install pwntools && \
     pip install ropper && \
-# Install gef
     wget -O ~/.gdbinit-gef.py -q https://github.com/hugsy/gef/raw/master/gef.py && \
     echo source ~/.gdbinit-gef.py >> ~/.gdbinit && \
     cd ~ && \
     tar -xvf /usr/src/glibc/glibc-2.23.tar.xz
 
-RUN cd ~ && git clone https://github.com/keystone-engine/keystone.git && \
-    cd keystone && \
-    mkdir build && \
-    cd build 
 
-RUN cd ~/keystone/build && ../make-share.sh && \
-    make install && \
-    cd /tmp && \
-    echo "/usr/local/lib" >> /etc/ld.so.conf && \
-    ldconfig
-
-# the apt-get on top is too huge, seperate a little
-RUN apt-get update && \
-    DEBIAN_FRONTEND=noninteractive apt-get install -qy \
-    socat
 
 # Set the locale, so that we can use unicode and send signal in gef
 ENV LANG C.UTF-8
