@@ -14,9 +14,7 @@ RUN apt-get update && \
     wget \
     curl \
     glibc-source \
-# needed when install keystone
     cmake \
-# needed by pwntools, whose pip-install not installed this dependency
     python-capstone && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
@@ -28,30 +26,31 @@ RUN cd ~ && git clone https://github.com/keystone-engine/keystone.git && \
     cd /tmp && \
     echo "/usr/local/lib" >> /etc/ld.so.conf && \
     ldconfig && rm -rf ~/keystone && \
-    pip install keystone-engine
+    pip install keystone-engine && \
+    rm -rf ~/keystone
 
 # the apt-get on top is too huge, seperate a little
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -qy \
     socat \
     netcat && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*  && \
-    pip install git+https://github.com/Escapingbug/roputils.git
-
-# pip, pwntools, ropper
-# These things may update
-RUN pip install -U pip && \
-    pip install pwntools && \
-    pip install ropper && \
-    wget -O ~/.gdbinit-gef.py -q https://github.com/hugsy/gef/raw/master/gef.py && \
-    echo source ~/.gdbinit-gef.py >> ~/.gdbinit && \
     cd ~ && \
     tar -xvf /usr/src/glibc/glibc-2.23.tar.xz
 
+ARG BUILD_VER=unknown
 
+# pip, pwntools, ropper
+# These things may update
+#    wget -O ~/.gdbinit-gef.py -q https://github.com/hugsy/gef/raw/master/gef.py && \
+# experimental gef version of myself
+RUN BUILD_VER=${BUILD_VER} pip install -U pip && \
+    pip install pwntools ropper ancypatch && \
+    pip install git+https://github.com/Escapingbug/roputils.git && \
+    wget -O ~/.gdbinit-gef.py -q https://raw.githubusercontent.com/Escapingbug/gef/master/gef.py &&
+    echo source ~/.gdbinit-gef.py >> ~/.gdbinit
 
 # Set the locale, so that we can use unicode and send signal in gef
 ENV LANG C.UTF-8
-
 
 VOLUME ["/pwn"]
 WORKDIR /pwn
