@@ -1,4 +1,4 @@
-FROM ubuntu:xenial
+FROM ubuntu:17.10
 
 MAINTAINER Anciety <ding641880047@126.com>
 
@@ -35,19 +35,22 @@ RUN apt-get update && \
     socat \
     netcat && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*  && \
     cd ~ && \
-    tar -xvf /usr/src/glibc/glibc-2.23.tar.xz
+    tar -xvf /usr/src/glibc/glibc-2.26.tar.xz
 
 ARG BUILD_VER=unknown
 
 # pip, pwntools, ropper
 # These things may update
-#    wget -O ~/.gdbinit-gef.py -q https://github.com/hugsy/gef/raw/master/gef.py && \
 # experimental gef version of myself
 RUN BUILD_VER=${BUILD_VER} pip install -U pip && \
     pip install pwntools ropper ancypatch && \
     pip install git+https://github.com/Escapingbug/roputils.git && \
-    wget -O ~/.gdbinit-gef.py -q https://raw.githubusercontent.com/Escapingbug/gef/master/gef.py &&
+    wget -O ~/.gdbinit-gef.py -q https://github.com/hugsy/gef/raw/master/gef.py && \
     echo source ~/.gdbinit-gef.py >> ~/.gdbinit
+
+RUN apt-get update && apt-get install -qy ruby && gem install one_gadget && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Set the locale, so that we can use unicode and send signal in gef
 ENV LANG C.UTF-8

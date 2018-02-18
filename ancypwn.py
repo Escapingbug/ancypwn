@@ -53,6 +53,11 @@ def parse_args():
         type=str,
         help='The directory which contains your pwn challenge'
     )
+    run_parser.add_argument(
+        '--ubuntu',
+        type=str,
+        help='The version of ubuntu to open'
+    )
     run_parser.set_defaults(func=run_pwn)
 
     attach_parser = subparsers.add_parser(
@@ -115,6 +120,10 @@ def run_pwn(args):
     """Runs a pwn thread
     Just sets needed docker arguments and run it
     """
+    if not args.ubuntu:
+        ubuntu = ''
+    else:
+        ubuntu = ':' + args.ubuntu
     if not args.directory.startswith('~') and \
             not args.directory.startswith('/'):
                 # relative path
@@ -128,7 +137,7 @@ def run_pwn(args):
     
     # First we need a running thread in the background, to hold existence
     running_container = container.run(
-        'ancypwn',
+        'ancypwn{}'.format(ubuntu),
         '/bin/bash',
         cap_add=['SYS_ADMIN', 'SYS_PTRACE'],
         detach=True,
@@ -139,7 +148,7 @@ def run_pwn(args):
                 'mode': 'rw'
             }
         },
-        net='host'
+        #net='host'
     )
 
     # Set flag, save the container id
