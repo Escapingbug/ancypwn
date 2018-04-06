@@ -180,20 +180,26 @@ def run_pwn(args):
         raise AlreadyRuningException('Another pwn thread is already running')
 
     # First we need a running thread in the background, to hold existence
-    running_container = container.run(
-        'ancypwn:{}'.format(ubuntu),
-        '/bin/bash',
-        cap_add=['SYS_ADMIN', 'SYS_PTRACE'],
-        detach=True,
-        tty=True,
-        volumes={
-            os.path.expanduser(args.directory) : {
-                'bind': '/pwn',
-                'mode': 'rw'
-            }
-        },
-        #net='host'
-    )
+    try:
+        running_container = container.run(
+            'ancypwn:{}'.format(ubuntu),
+            '/bin/bash',
+            cap_add=['SYS_ADMIN', 'SYS_PTRACE'],
+            detach=True,
+            tty=True,
+            volumes={
+                os.path.expanduser(args.directory) : {
+                    'bind': '/pwn',
+                    'mode': 'rw'
+                }
+            },
+            #net='host'
+        )
+    except Exception as e:
+        print('This maybe caused by not completely installed ancypwn.')
+        print('Have you read https://github.com/Escapingbug/ancypwn?')
+        print()
+        raise e
 
     # Set flag, save the container id
     with open(EXIST_FLAG, 'w') as flag:

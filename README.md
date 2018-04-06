@@ -14,14 +14,15 @@ This docker image provide:
 * glibc source and debug version glibc(so we can debug libc with source)
 * Ropper
 * ROPGadgets
+* one_gadget
 
 Nothing else for now, and it is sufficient most of the time. If you have some suggestion of what is needed or how to make this image smaller, 
 it is welcome to comment an issue.
 
 # Installation
 1. Install docker, we recommend you to let your distribution to do so.
-2. Since the image is too huge to upload, we provide you a `Dockerfile`, you can build an image yourself. And, please do that by using `docker build . --tag ancypwn`
-3. Run `python setup.py install`, or maybe you need `sudo`
+2. Since the image is too huge to upload, we provide you a `Dockerfile`, you can build an image yourself. And, please do that by using given `build.sh`, run `build.sh` under linux distribution where `docker` is provided should be sufficient. If not? Please give me an issue and describe what's wrong.
+3. Run `python setup.py install`, or maybe you need `sudo`. Pip version is also provided and recommended `pip install ancypwn`
 4. Everything should be good by now. If you got permission problems, try `sudo`
 
 # Usage
