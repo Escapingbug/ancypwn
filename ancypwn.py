@@ -2,13 +2,27 @@
 import argparse
 import os
 import docker
+import sys
+import subprocess as sp
 
 EXIST_FLAG = '/tmp/ancypwn.id'
+SUPPORTED_UBUNTU_VERSION = [
+    "17.10",
+    "16.04",
+]
 
 client = docker.from_env()
 container = client.containers
 image = client.images
 
+class UnsupportedUbuntuVersion(Exception):
+    pass
+
+class AlreadyRuningException(Exception):
+    pass
+
+class NotRunningException(Exception):
+    pass
 
 class ColorWrite(object):
     COLOR_SET = {
@@ -22,7 +36,6 @@ class ColorWrite(object):
 
     def color_write(content, color):
         print(ColorWrite.COLOR_SET[color] + content + ColorWrite.COLOR_SET['END'])
-
 
 def colorwrite_init():
     for color in ColorWrite.COLOR_SET:
@@ -80,6 +93,22 @@ def parse_args():
         parser.print_usage()
 
 
+def _get_terminal_size():
+    p = sp.run('tput cols', shell=True, stdout=sp.PIPE)
+    def _print_warning():
+        print('Warning: Unable to get terminal size, you need to specify terminal size ' +
+              'manually or your command line may behave strangely')
+    if p.returncode != 0:
+        _print_warning()
+        return None, None
+    cols = int(p.stdout)
+    p = sp.run('tput rows', shell=True, stdout=sp.PIPE)
+    if p.returncode != 0:
+        _print_warning()
+        return None, None
+    rows = int(p.stdout)
+    return cols, rows
+
 def _read_container_name():
     if not os.path.exists(EXIST_FLAG):
         raise Exception('Pwn thread is not running')
@@ -96,9 +125,16 @@ def _read_container_name():
     return container_name
 
 def _attach_interactive(name):
-    cmd = "docker exec -it {} '/bin/bash'".format(
-        name
-    )
+    rows, cols = _get_terminal_size()
+    if rows and cols:
+        cmd = "docker exec -it {} '/bin/bash -c \"{}\"'".format(
+            name,
+            'export COLUMNS={}; export LINES={}; exec bash'
+        )
+    else:
+        cmd = "docker exec -it {} '/bin/bash'".format(
+            name,
+        )
 
     ColorWrite.yellow(
         '''
@@ -123,6 +159,9 @@ def run_pwn(args):
     if not args.ubuntu:
         ubuntu = ''
     else:
+        # check for unsupported ubuntu version
+        if args.ubuntu not in SUPPORTED_UBUNTU_VERSION:
+            raise UnsupportedUbuntuVersion('version %s not supported!' % args.ubuntu )
         ubuntu = ':' + args.ubuntu
     if not args.directory.startswith('~') and \
             not args.directory.startswith('/'):
@@ -133,8 +172,8 @@ def run_pwn(args):
         raise FileNotFoundError('No such directory')
 
     if os.path.exists(EXIST_FLAG):
-        raise Exception('Another pwn thread is already running')
-    
+        raise AlreadyRuningException('Another pwn thread is already running')
+
     # First we need a running thread in the background, to hold existence
     running_container = container.run(
         'ancypwn{}'.format(ubuntu),
@@ -180,7 +219,7 @@ def end_pwn(args):
     conts = container.list(filters={'name':container_name})
     if len(conts) < 1:
         os.remove(EXIST_FLAG)
-        raise Exception('No pwn thread running, corrupted meta info file, deleted')
+        raise NotRunningException('No pwn thread running, corrupted meta info file, deleted')
     conts[0].stop()
     os.remove(EXIST_FLAG)
 
