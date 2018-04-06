@@ -42,3 +42,44 @@ optional arguments:
   -h, --help        show this help message and exit
 
 ```
+
+# Examples
+During CTF games, we usually need a dynamic analysis environment to do all the dynamic stuff, but
+some challenges may contain extra stuff that may taint your current linux machine.
+
+So, we just use the `ancypwn`, and do something like this:
+```
+# Suppose we have a directory to save all pwnable challenges
+# And we run like this
+# Term 1:
+cd pwn
+sudo ancypwn run .
+# Now we are in a docker shell, and do something, like playing with the original binary
+# Then we create another terminal, to use gdb to attach it
+# The mounted directory are in `/pwn`
+cd /pwn
+./example_binary
+
+# Term 2:
+sudo ancypwn attach
+# Now we are in the docker shell which is in the same docker machine of the previous one, but
+# we have a different shell, we can use gdb to attach to the processes now
+gdb
+(gdb) attach PID
+
+# We can also run exploit python script directly, you'd like to write something like `raw_input`
+# to pause the process a little bit and let terminal 2 to use gdb to attach to it.
+# Term 1:
+python exp.py
+
+# Term 2:
+gdb
+(gdb) attach PID
+```
+
+In general, this simple script only provides you a direct way of using docker. All things are done
+by docker itself. The script just makes the docker act like a real "virtual machine".
+
+Since many challenges use different `libc`s, this can also be achieved. By default, "17.10" and
+"16.04" of ubuntu is provided, if you need others, commit an issue, please. And they can be used
+use `--ubuntu 17.10`. `16.04` is used by default.
