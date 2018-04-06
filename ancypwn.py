@@ -102,12 +102,13 @@ def _get_terminal_size():
         _print_warning()
         return None, None
     cols = int(p.stdout)
-    p = sp.run('tput rows', shell=True, stdout=sp.PIPE)
+    p = sp.run('tput lines', shell=True, stdout=sp.PIPE)
     if p.returncode != 0:
         _print_warning()
         return None, None
     rows = int(p.stdout)
     return cols, rows
+
 
 def _read_container_name():
     if not os.path.exists(EXIST_FLAG):
@@ -125,12 +126,16 @@ def _read_container_name():
     return container_name
 
 def _attach_interactive(name):
-    rows, cols = _get_terminal_size()
+    cols, rows = _get_terminal_size()
     if rows and cols:
-        cmd = "docker exec -it {} '/bin/bash -c \"{}\"'".format(
+        cmd = "docker exec -it {} bash -c \"{}\"".format(
             name,
-            'export COLUMNS={}; export LINES={}; exec bash'
+            'stty cols {} && stty rows {} && bash'.format(
+                cols,
+                rows,
+            )
         )
+        print(cmd)
     else:
         cmd = "docker exec -it {} '/bin/bash'".format(
             name,
@@ -157,7 +162,7 @@ def run_pwn(args):
     Just sets needed docker arguments and run it
     """
     if not args.ubuntu:
-        ubuntu = ''
+        ubuntu = '16.04'
     else:
         # check for unsupported ubuntu version
         if args.ubuntu not in SUPPORTED_UBUNTU_VERSION:
@@ -176,7 +181,7 @@ def run_pwn(args):
 
     # First we need a running thread in the background, to hold existence
     running_container = container.run(
-        'ancypwn{}'.format(ubuntu),
+        'ancypwn:{}'.format(ubuntu),
         '/bin/bash',
         cap_add=['SYS_ADMIN', 'SYS_PTRACE'],
         detach=True,

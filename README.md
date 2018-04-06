@@ -19,8 +19,8 @@ Nothing else for now, and it is sufficient most of the time. If you have some su
 it is welcome to comment an issue.
 
 # Installation
-1. Install docker, we recommend you to use your distribution to do so.
-2. Since the image is too huge to upload, we provide you a `Dockerfile`, you can build an image yourself. And, please do that.
+1. Install docker, we recommend you to let your distribution to do so.
+2. Since the image is too huge to upload, we provide you a `Dockerfile`, you can build an image yourself. And, please do that by using `docker build . --tag ancypwn`
 3. Run `python setup.py install`, or maybe you need `sudo`
 4. Everything should be good by now. If you got permission problems, try `sudo`
 
