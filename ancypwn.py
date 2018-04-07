@@ -135,7 +135,6 @@ def _attach_interactive(name):
                 rows,
             )
         )
-        print(cmd)
     else:
         cmd = "docker exec -it {} '/bin/bash'".format(
             name,
@@ -167,7 +166,7 @@ def run_pwn(args):
         # check for unsupported ubuntu version
         if args.ubuntu not in SUPPORTED_UBUNTU_VERSION:
             raise UnsupportedUbuntuVersion('version %s not supported!' % args.ubuntu )
-        ubuntu = ':' + args.ubuntu
+        ubuntu = args.ubuntu
     if not args.directory.startswith('~') and \
             not args.directory.startswith('/'):
                 # relative path
