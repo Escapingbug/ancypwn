@@ -1,6 +1,8 @@
-FROM ubuntu:17.10
+FROM ubuntu:18.10
 
-MAINTAINER Anciety <ding641880047@126.com>
+MAINTAINER Anciety <anciety512@gmail.com>
+
+RUN dpkg --add-architecture i386
 
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -qy \
@@ -8,8 +10,9 @@ RUN apt-get update && \
     build-essential \
     python-dev python-pip python-setuptools \
     libc6-dbg \
+    libc6-dbg:i386 \
     gcc-multilib \
-    gdb \
+    gdb-multiarch \
     gcc \
     wget \
     curl \
@@ -35,14 +38,19 @@ RUN apt-get update && \
     socat \
     netcat && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*  && \
     cd ~ && \
-    tar -xvf /usr/src/glibc/glibc-2.26.tar.xz
+    tar -xvf /usr/src/glibc/glibc-*.tar.xz
 
 ARG BUILD_VER=unknown
 
 # pip, pwntools, ropper
 # These things may update
 # experimental gef version of myself
-RUN BUILD_VER=${BUILD_VER} pip install -U pip && \
+RUN pip install -U pip
+RUN echo 'from pip import main' > /usr/bin/pip
+RUN echo 'if name == 'main':' >> /usr/bin/pip
+RUN echo ' sys.exit(main._main())' >> /usr/bin/pip
+
+RUN BUILD_VER=${BUILD_VER} \
     pip install pwntools ropper ancypatch && \
     pip install git+https://github.com/Escapingbug/roputils.git && \
     wget -O ~/.gdbinit-gef.py -q https://github.com/hugsy/gef/raw/master/gef.py && \

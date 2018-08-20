@@ -7,7 +7,7 @@ import subprocess as sp
 
 EXIST_FLAG = '/tmp/ancypwn.id'
 SUPPORTED_UBUNTU_VERSION = [
-    "17.10",
+    "18.10",
     "16.04",
 ]
 

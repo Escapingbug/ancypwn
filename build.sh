@@ -12,5 +12,5 @@ fi
 echo "Building default docker image..."
 ${sudo_cmd} docker build default_docker --tag ancypwn:16.04
 
-# build 17.10
-${sudo_cmd} docker build 1710_docker --tag ancypwn:17.10
+# build 18.10
+${sudo_cmd} docker build 1810_docker --tag ancypwn:18.10
