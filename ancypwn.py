@@ -1,4 +1,5 @@
 #!/bin/python
+from __future__ import print_function
 import argparse
 import os
 import docker
@@ -14,6 +15,9 @@ SUPPORTED_UBUNTU_VERSION = [
 client = docker.from_env()
 container = client.containers
 image = client.images
+
+class InstallationError(Exception):
+    pass
 
 class UnsupportedUbuntuVersion(Exception):
     pass
@@ -34,13 +38,14 @@ class ColorWrite(object):
             'cyan': '\033[36m',
     }
 
+    @staticmethod
     def color_write(content, color):
         print(ColorWrite.COLOR_SET[color] + content + ColorWrite.COLOR_SET['END'])
 
 def colorwrite_init():
     for color in ColorWrite.COLOR_SET:
         # Use default value for lambda to avoid lazy capture of closure
-        setattr(ColorWrite, color, lambda x, color=color: ColorWrite.color_write(x, color))
+        setattr(ColorWrite, color, staticmethod(lambda x, color=color: ColorWrite.color_write(x, color)))
 
 # Static initialize ColorWrite
 colorwrite_init()
@@ -94,7 +99,7 @@ def parse_args():
 
 
 def _get_terminal_size():
-    p = sp.run('tput cols', shell=True, stdout=sp.PIPE)
+    p = sp.Popen('tput cols', shell=True, stdout=sp.PIPE)
     def _print_warning():
         print('Warning: Unable to get terminal size, you need to specify terminal size ' +
               'manually or your command line may behave strangely')
@@ -102,7 +107,7 @@ def _get_terminal_size():
         _print_warning()
         return None, None
     cols = int(p.stdout)
-    p = sp.run('tput lines', shell=True, stdout=sp.PIPE)
+    p = sp.Popen('tput lines', shell=True, stdout=sp.PIPE)
     if p.returncode != 0:
         _print_warning()
         return None, None
@@ -153,7 +158,6 @@ def _attach_interactive(name):
         '''
     )
     os.system(cmd)
-
 
 
 def run_pwn(args):
@@ -218,7 +222,8 @@ def attach_pwn(args):
 
     # FIXME Is it better that we just exec it with given name?
     conts = container.list(filters={'name':container_name})
-    assert len(conts) == 1
+    if len(conts) != 1:
+        raise InstallationError('Installation seems to be run. There are more than one image called ancypwn')
     _attach_interactive(conts[0].name)
     
 
