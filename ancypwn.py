@@ -78,6 +78,12 @@ def parse_args():
     )
     run_parser.set_defaults(func=run_pwn)
 
+    run_parser.add_argument(
+        '--priv',
+        action='store_true',
+        help='privileged boot, so you can use something like kvm'
+    )
+
     attach_parser = subparsers.add_parser(
         'attach',
         help='attach to running thread',
@@ -182,6 +188,8 @@ def run_pwn(args):
     if os.path.exists(EXIST_FLAG):
         raise AlreadyRuningException('Another pwn thread is already running')
 
+    privileged = True if args.priv else False
+
     # First we need a running thread in the background, to hold existence
     try:
         running_container = container.run(
@@ -196,6 +204,7 @@ def run_pwn(args):
                     'mode': 'rw'
                 }
             },
+            privileged=privileged
             #net='host'
         )
     except Exception as e:

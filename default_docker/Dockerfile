@@ -60,6 +60,9 @@ RUN apt-get update && apt-get install -qy ruby && gem install one_gadget && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
+# personal loveness
+RUN pip install hy
+
 # Set the locale, so that we can use unicode and send signal in gef
 ENV LANG C.UTF-8
 
