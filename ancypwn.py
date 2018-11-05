@@ -2,14 +2,22 @@
 from __future__ import print_function
 import argparse
 import os
+import os.path
 import docker
 import sys
+import json
 import subprocess as sp
+
+from distutils.dir_util import mkpath
+
+APPNAME = 'ancypwn'
+APPAUTHOR = 'Anciety'
 
 EXIST_FLAG = '/tmp/ancypwn.id'
 SUPPORTED_UBUNTU_VERSION = [
-    "18.10",
-    "16.04",
+#    '14.04', Still many issues to be solved (version problems mostly)
+    '16.04',
+    '18.10',
 ]
 
 client = docker.from_env()
@@ -183,7 +191,7 @@ def run_pwn(args):
         args.directory = os.path.abspath(args.directory)
 
     if not os.path.exists(args.directory):
-        raise FileNotFoundError('No such directory')
+        raise IOError('No such directory')
 
     if os.path.exists(EXIST_FLAG):
         raise AlreadyRuningException('Another pwn thread is already running')
@@ -202,10 +210,21 @@ def run_pwn(args):
                 os.path.expanduser(args.directory) : {
                     'bind': '/pwn',
                     'mode': 'rw'
+                },
+                os.path.expanduser('~/.Xauthority') : {
+                    'bind': '/root/.Xauthority',
+                    'mode': 'rw'
+                },
+                os.path.expanduser('/tmp/.X11-unix') : {
+                    'bind': '/tmp/.X11-unix',
+                    'mode': 'rw'
                 }
             },
-            privileged=privileged
-            #net='host'
+            privileged=privileged,
+            network_mode='host',
+            environment={
+                'DISPLAY': os.environ['DISPLAY']
+            }
         )
     except Exception as e:
         print('This maybe caused by not completely installed ancypwn.')

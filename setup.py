@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='ancypwn',
-    version='0.2.4-1810',
+    version='0.2.5',
     description='Ancypwn docker image manipulation script, to simplify docker pwn environment management',
     url='https://github.com/Escapingbug/ancypwn',
     author='Anciety',
@@ -12,6 +12,6 @@ setup(
         'console_scripts': ['ancypwn=ancypwn:main']
     },
     install_requires=[
-        'docker'
+        'docker',
     ]
 )
