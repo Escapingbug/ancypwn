@@ -200,6 +200,7 @@ def run_pwn(args):
 
     # First we need a running thread in the background, to hold existence
     try:
+        os.system('xhost +')
         running_container = container.run(
             'ancypwn:{}'.format(ubuntu),
             '/bin/bash',
