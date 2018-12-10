@@ -1,18 +1,13 @@
-##### NOT CURRENTLY WORKING #####
-FROM ubuntu:14.04
+FROM ubuntu:18.04
 
 MAINTAINER Anciety <anciety512@gmail.com>
 
-# Apt packages (without libc source code)
-RUN dpkg --add-architecture i386 && \
-    sed 's/# deb-src/deb-src/g' /etc/apt/sources.list > /tmp/source && \
-    mv /tmp/source /etc/apt/sources.list && \
-    apt-get update && \
+# Apt packages
+RUN dpkg --add-architecture i386 && apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -qy \
     git nasm  python \
     build-essential \
     python-dev python-pip python-setuptools \
-    xz-utils \
     libc6-dbg \
     libc6-dbg:i386 \
     gcc-multilib \
@@ -20,20 +15,19 @@ RUN dpkg --add-architecture i386 && \
     gcc \
     wget \
     curl \
+    glibc-source \
     cmake \
+    python-capstone \
     socat \
     netcat \
     ruby \
-    libffi-dev \
-    openssl \
-    libssl-dev \
     lxterminal && \
-    cd ~/ && \
     apt-get clean && \
-    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
+    cd ~ && tar -xvf /usr/src/glibc/glib*.tar.xz
 
 # python/ruby packages & gdb-plugin
-RUN pip install --upgrade pip setuptools && pip install pwntools ropper ancypatch capstone && \
+RUN pip install --no-cache-dir pwntools ropper ancypatch && \
     gem install one_gadget && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
