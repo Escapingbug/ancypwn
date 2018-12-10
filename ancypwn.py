@@ -28,9 +28,6 @@ image = client.images
 class InstallationError(Exception):
     pass
 
-class UnsupportedUbuntuVersion(Exception):
-    pass
-
 class AlreadyRuningException(Exception):
     pass
 
@@ -132,7 +129,7 @@ def _get_terminal_size():
 
 def _read_container_name():
     if not os.path.exists(EXIST_FLAG):
-        raise Exception('Pwn thread is not running')
+        raise Exception('ancypwn is not running, consider use ancypwn run first')
 
     container_name = ''
     with open(EXIST_FLAG, 'r') as flag:
@@ -140,8 +137,8 @@ def _read_container_name():
 
     if container_name == '':
         os.remove(EXIST_FLAG)
-        raise Exception('Meta info corrupted, or unable to read saved info. ' + \
-                'Cleaning corrupted meta-info, please shutdown container manually')
+        raise Exception('ancypwn id file is  corrupted, or unable to read saved id file. ' + \
+                'Cleaning corrupted id file, please shutdown the container manually')
 
     return container_name
 
@@ -184,7 +181,8 @@ def run_pwn(args):
     else:
         # check for unsupported ubuntu version
         if args.ubuntu not in SUPPORTED_UBUNTU_VERSION:
-            raise UnsupportedUbuntuVersion('version %s not supported!' % args.ubuntu )
+            print('you are using ubuntu version %s' % args.ubuntu)
+            print('this version may not be officially supported')
         ubuntu = args.ubuntu
     if not args.directory.startswith('~') and \
             not args.directory.startswith('/'):
@@ -195,7 +193,7 @@ def run_pwn(args):
         raise IOError('No such directory')
 
     if os.path.exists(EXIST_FLAG):
-        raise AlreadyRuningException('Another pwn thread is already running')
+        raise AlreadyRuningException('ancypwn is already running, you should either end it  to run again or attach it')
 
     privileged = True if args.priv else False
 
@@ -226,11 +224,12 @@ def run_pwn(args):
             network_mode='host',
             environment={
                 'DISPLAY': os.environ['DISPLAY']
-            }
+            },
+            remove=True, # This is important, or else we will have many stopped containers
         )
     except Exception as e:
-        print('This maybe caused by not completely installed ancypwn.')
-        print('Have you read https://github.com/Escapingbug/ancypwn?')
+        print('Ancypwn unable to run docker container')
+        print('please refer to documentation to correctly setup your environment')
         print()
         raise e
 
