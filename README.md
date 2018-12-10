@@ -1,4 +1,5 @@
 # ancypwn
+
 Ancypwn is a small project to make pwn environment easily managed.
 
 It uses docker as a seperate environment for pwn development, and provided a script to manage this docker image(container).
@@ -7,7 +8,7 @@ Currently, this can only run under linux environment. So the goal of this projec
 wants to do finish some CTF pwn challenges, especially who doesn't use ubuntu but other distributions which is not used widely as pwn server.
 
 This docker image provide:
-* gef
+* pwndbg
 * pwntools
 * keystone assmebler
 * capstone disassembler
@@ -20,6 +21,7 @@ Nothing else for now, and it is sufficient most of the time. If you have some su
 it is welcome to comment an issue.
 
 # Installation
+
 1. Install docker, we recommend you to let your distribution to do so.
 2. Since the image is too huge to upload, we provide you a `Dockerfile`, you can build an image yourself. And, please do that by using given `build.sh`, run `build.sh` under linux distribution where `docker` is provided should be sufficient. If not? Please give me an issue and describe what's wrong.
 3. Run `python setup.py install`, or maybe you need `sudo`. Pip version is also provided and recommended `pip install ancypwn`
@@ -44,10 +46,12 @@ optional arguments:
 ```
 
 # Examples
+
 During CTF games, we usually need a dynamic analysis environment to do all the dynamic stuff, but
 some challenges may contain extra stuff that may taint your current linux machine.
 
 So, we just use the `ancypwn`, and do something like this:
+
 ```
 # Suppose we have a directory to save all pwnable challenges
 # And we run like this
@@ -83,3 +87,13 @@ by docker itself. The script just makes the docker act like a real "virtual mach
 Since many challenges use different `libc`s, this can also be achieved. By default, "17.10" and
 "16.04" of ubuntu is provided, if you need others, commit an issue, please. And they can be used
 use `--ubuntu 17.10`. `16.04` is used by default.
+
+# Status
+
+Current supported version:
+
+* 18.10
+* 18.04
+* 16.04
+
+14.04 is having many issues not yet resolved.. Please fire an issue if you know how to install all the tools on 14.04, I will be appreciate.
