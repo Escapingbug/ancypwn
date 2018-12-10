@@ -22,10 +22,24 @@ it is welcome to comment an issue.
 
 # Installation
 
+## Linux
+
 1. Install docker, we recommend you to let your distribution to do so.
 2. Since the image is too huge to upload, we provide you a `Dockerfile`, you can build an image yourself. And, please do that by using given `build.sh`, run `build.sh` under linux distribution where `docker` is provided should be sufficient. If not? Please give me an issue and describe what's wrong.
 3. Run `python setup.py install`, or maybe you need `sudo`. Pip version is also provided and recommended `pip install ancypwn`
 4. Everything should be good by now. If you got permission problems, try `sudo`
+
+## MacOS
+
+1. Install docker
+
+2. Then Install  xquartz , `brew cask install xquartz`
+
+3. open -a XQuartz and set it like this:
+
+   ![](https://blog-1252049492.cos.ap-hongkong.myqcloud.com/img/Xquartz.png)
+
+4. Final , use ancypwn script and fun it !
 
 # Usage
 
