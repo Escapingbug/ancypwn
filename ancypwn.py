@@ -17,6 +17,7 @@ EXIST_FLAG = '/tmp/ancypwn.id'
 SUPPORTED_UBUNTU_VERSION = [
 #    '14.04', Still many issues to be solved (version problems mostly)
     '16.04',
+    '18.04',
     '18.10',
 ]
 
