@@ -42,6 +42,10 @@ For correctly use GUI programs (particularly, lxterminal, so that you will can u
 2. open -a XQuartz and set it like this:
    ![](https://blog-1252049492.cos.ap-hongkong.myqcloud.com/img/Xquartz.png)
 3. Now everything should be done.
+4. If you have encountered warning messages like "ancypwn cannot automatically set DISPLAY", then you should do following steps
+5. First, use `ip addr show` or `ifconfig` to see what's your ip address of your using network card
+6. Next, set `ANCYPWN_DISPLAY` environment variable to "[ip]:0", after these, it should be fine. You can use ancypwn and see if `lxterminal` is working.
+
 
 # Usage
 

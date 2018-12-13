@@ -219,17 +219,21 @@ def run_pwn(args):
 
     # First we need a running thread in the background, to hold existence
     try:
-        if platform.system() == 'Darwin' and os.environ.get('DISPLAY') is None:
-            # under macos, we need extra settings if user does't have one
-            try:
-                ip_addr = _get_ip_addr('en0')
-            except Exception:
-                print('unable to automatic setup DISPLAY environment.')
-                print('this is needed because of running gui program within docker')
-                print('please determine your current ip address and setup environment DISPLAY as [ip]:0')
-                print('if you just ignore this, set DISPLAY environment to :0 should do')
-                raise SetupError()
-            os.environ['DISPLAY'] = ip_addr + ':0'
+        ancypwn_display = os.environ.get('ANCYPWN_DISPLAY')
+        if platform.system() == 'Darwin':
+            if ancypwn_display is None:
+                # under macos, we need extra settings if user does't have one
+                try:
+                    ip_addr = _get_ip_addr('en0')
+                except Exception:
+                    print('unable to automatic setup DISPLAY environment.')
+                    print('this is needed because of running gui program within docker')
+                    print('please determine your current ip address and setup environment ANCYPWN_DISPLAY as [ip]:0')
+                    print('if you just ignore this, set ANCYPWN_DISPLAY environment to :0 should do')
+                    raise SetupError()
+                os.environ['DISPLAY'] = ip_addr + ':0'
+            else:
+                os.environ['DISPLAY'] = ancypwn_display
         os.system('xhost +')
         running_container = container.run(
             'ancypwn:{}'.format(ubuntu),
