@@ -22,24 +22,30 @@ it is welcome to comment an issue.
 
 # Installation
 
-## Linux
+## Linux & MacOS Normal Setup
 
 1. Install docker, we recommend you to let your distribution to do so.
-2. Since the image is too huge to upload, we provide you a `Dockerfile`, you can build an image yourself. And, please do that by using given `build.sh`, run `build.sh` under linux distribution where `docker` is provided should be sufficient. If not? Please give me an issue and describe what's wrong.
+
+2. we have provided you with a `Dockerfile`, you can build an image yourself. And, please do that by using given `build.sh`, run `build.sh`. If you want more customization, please refer to customization section, and understand what's under the hood.
+
+3. Alternatively, you can pull down anciety/ancypwn:16.04, and tag it to `ancypwn:16.04`, ubuntu version number is switchable.
+
 3. Run `python setup.py install`, or maybe you need `sudo`. Pip version is also provided and recommended `pip install ancypwn`
+
 4. Everything should be good by now. If you got permission problems, try `sudo`
 
-## MacOS
+## MacOS GUI setup
 
-1. Install docker
+For correctly use GUI programs (particularly, lxterminal, so that you will can use `gdb.attach()` within `pwntools`), MacOS needs to do the following(Linux users using xserver don't need to worry about these):
 
-2. Then Install  xquartz , `brew cask install xquartz`
-
-3. open -a XQuartz and set it like this:
-
+1. Install xquartz , you can use `brew cask install xquartz` if you are using homebrew.
+2. open -a XQuartz and set it like this:
    ![](https://blog-1252049492.cos.ap-hongkong.myqcloud.com/img/Xquartz.png)
+3. Now everything should be done.
+4. If you have encountered warning messages like "ancypwn cannot automatically set DISPLAY", then you should do following steps
+5. First, use `ip addr show` or `ifconfig` to see what's your ip address of your using network card
+6. Next, set `ANCYPWN_DISPLAY` environment variable to "[ip]:0", after these, it should be fine. You can use ancypwn and see if `lxterminal` is working.
 
-4. Final , use ancypwn script and fun it !
 
 # Usage
 
@@ -101,6 +107,26 @@ by docker itself. The script just makes the docker act like a real "virtual mach
 Since many challenges use different `libc`s, this can also be achieved. By default, "17.10" and
 "16.04" of ubuntu is provided, if you need others, commit an issue, please. And they can be used
 use `--ubuntu 17.10`. `16.04` is used by default.
+
+# Customization
+
+I understand that each hacker needs his own environment, and this is just my settings. Sometimes you just want to use my idea and do your own settings, and this is how you can do this.
+
+## Under the hood
+
+The idea is that you have a docker image containing hacking tools you need to run, and run it when you want to hack on something. The `ancypwn` program is a python script to call docker for you. What it does is just call docker with gui support, and setup a background bash to hold the docker container. Whenever you want to attach to it, it `exec`s a bash for you, so it works like a background virtual machine.
+
+And for finding the correct image to start, it searches for tags with form `ancypwn:{ubuntu version}`, for example, if you use `ancypwn run . --ubuntu 16.04`, this will start image of name `ancypwn:16.04`.
+
+After start the image, it will run a bash as a background process in the container to hold up the container, and whenever you want shell access, it will exec bash inside the container. This is done by saving started container name in `/tmp/ancypwn.id`.
+
+## To Customize
+
+For this reason, if you want to have your own image running with `ancypwn` script, you just need to build your own docker image, and then tag it using name `ancypwn:{ubuntu version number}`.
+
+Actually, the ubuntu version can be anything, it just fires a warning when it is not officially ones. So you can tag a thing like `ancypwn:hello`, and use it like `ancypwn run . --ubuntu hello`.
+
+I will consider add a more specific argument so this "ubuntu" arguments don't seem to strange.
 
 # Status
 

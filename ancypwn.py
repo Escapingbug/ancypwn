@@ -6,6 +6,10 @@ import os.path
 import docker
 import sys
 import json
+import socket
+import fcntl
+import platform
+import struct
 import subprocess as sp
 
 from distutils.dir_util import mkpath
@@ -24,6 +28,9 @@ SUPPORTED_UBUNTU_VERSION = [
 client = docker.from_env()
 container = client.containers
 image = client.images
+
+class SetupError(Exception):
+    pass
 
 class InstallationError(Exception):
     pass
@@ -109,6 +116,19 @@ def parse_args():
     else:
         parser.print_usage()
 
+
+def _get_ip_address(ifname):
+    """Gets ip address of some interface
+    """
+    if type(ifname) is str:
+        ifname = bytes(ifname, 'UTF-8')
+
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    return socket.inet_ntoa(fcntl.ioctl(
+        s.fileno(),
+        0x8915,  # SIOCGIFADDR
+        struct.pack('256s', ifname[:15])
+    )[20:24])
 
 def _get_terminal_size():
     p = sp.Popen('tput cols', shell=True, stdout=sp.PIPE)
@@ -199,6 +219,21 @@ def run_pwn(args):
 
     # First we need a running thread in the background, to hold existence
     try:
+        ancypwn_display = os.environ.get('ANCYPWN_DISPLAY')
+        if platform.system() == 'Darwin':
+            if ancypwn_display is None:
+                # under macos, we need extra settings if user does't have one
+                try:
+                    ip_addr = _get_ip_address('en0')
+                except Exception:
+                    print('unable to automatic setup DISPLAY environment.')
+                    print('this is needed because of running gui program within docker')
+                    print('please determine your current ip address and setup environment ANCYPWN_DISPLAY as [ip]:0')
+                    print('if you just ignore this, set ANCYPWN_DISPLAY environment to :0 should do')
+                    raise SetupError()
+                os.environ['DISPLAY'] = ip_addr + ':0'
+            else:
+                os.environ['DISPLAY'] = ancypwn_display
         os.system('xhost +')
         running_container = container.run(
             'ancypwn:{}'.format(ubuntu),
