@@ -224,7 +224,7 @@ def run_pwn(args):
             if ancypwn_display is None:
                 # under macos, we need extra settings if user does't have one
                 try:
-                    ip_addr = _get_ip_addr('en0')
+                    ip_addr = _get_ip_address('en0')
                 except Exception:
                     print('unable to automatic setup DISPLAY environment.')
                     print('this is needed because of running gui program within docker')
