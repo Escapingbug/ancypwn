@@ -116,19 +116,15 @@ def parse_args():
     else:
         parser.print_usage()
 
-
 def _get_ip_address(ifname):
     """Gets ip address of some interface
     """
-    if type(ifname) is str:
-        ifname = bytes(ifname, 'UTF-8')
+    cmd = ("ifconfig %s| grep 'inet ' | awk -F: '{print $1}' | awk '{print $2}'" %str(ifname))
+    ip = os.popen(cmd).read().replace("\n","")
 
-    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    return socket.inet_ntoa(fcntl.ioctl(
-        s.fileno(),
-        0x8915,  # SIOCGIFADDR
-        struct.pack('256s', ifname[:15])
-    )[20:24])
+    return ip
+
+
 
 def _get_terminal_size():
     p = sp.Popen('tput cols', shell=True, stdout=sp.PIPE)
