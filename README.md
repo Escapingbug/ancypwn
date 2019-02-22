@@ -28,11 +28,13 @@ it is welcome to comment an issue.
 
 2. we have provided you with a `Dockerfile`, you can build an image yourself. And, please do that by using given `build.sh`, run `build.sh`. If you want more customization, please refer to customization section, and understand what's under the hood.
 
-3. Alternatively, you can pull down anciety/ancypwn:16.04, and tag it to `ancypwn:16.04`, ubuntu version number is switchable.
+3. Alternatively, you can pull down anciety/ancypwn:16.04, and tag it to `ancypwn:16.04`, ubuntu version number is switchable. (So anciety/ancypwn:18.10 shuld be tagged as `ancypwn:18.10`)
 
 3. Run `python setup.py install`, or maybe you need `sudo`. Pip version is also provided and recommended `pip install ancypwn`
 
-4. Everything should be good by now. If you got permission problems, try `sudo`
+4. Everything should be good by now. If you got permission problems, try `sudo`, or you are using `MacOS`, see following for help.
+
+5. If you see some error message complaining about "pull access denied" or something like that, check if your tag is corret.
 
 ## MacOS GUI setup
 
@@ -42,9 +44,21 @@ For correctly use GUI programs (particularly, lxterminal, so that you will can u
 2. open -a XQuartz and set it like this:
    ![](https://blog-1252049492.cos.ap-hongkong.myqcloud.com/img/Xquartz.png)
 3. Now everything should be done.
-4. If you have encountered warning messages like "ancypwn cannot automatically set DISPLAY", then you should do following steps
-5. First, use `ip addr show` or `ifconfig` to see what's your ip address of your using network card
-6. Next, set `ANCYPWN_DISPLAY` environment variable to "[ip]:0", after these, it should be fine. You can use ancypwn and see if `lxterminal` is working.
+
+### Common Problems
+
+#### "ancypwn cannot automatically set DISPLAY"
+
+1. First, use `ip addr show` or `ifconfig` to see what's your ip address of your using network card
+2. Next, set `ANCYPWN_DISPLAY` environment variable to "[ip]:0", after these, it should be fine. You can use ancypwn and see if `lxterminal` is working.
+
+#### "no protocol specified", lxterminal will not run
+
+1. run "xhost +" in your xquartz terminal(bash)
+
+#### "cannot open display IP:0"
+
+1. check that your xquartz is running, we recommand you set it to be opened on login
 
 
 # Usage
