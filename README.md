@@ -20,6 +20,10 @@ This docker image provide:
 Nothing else for now, and it is sufficient most of the time. If you have some suggestion of what is needed or how to make this image smaller, 
 it is welcome to comment an issue.
 
+# Warning
+
+Currently we are going through a transition phase from in-docker-terminal `lxterminal` to terminal outside. That means currently this support will be gradually added, but not instantely. If you get into any trouble, you can always fall back to pypi version instead of directly use github version. (Yes I'm just tired of managing branches) Pypi version should be working fine for now.
+
 # Installation
 
 ## Linux & MacOS Normal Setup
