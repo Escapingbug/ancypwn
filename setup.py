@@ -13,5 +13,6 @@ setup(
     },
     install_requires=[
         'docker',
+        'appscript', # for macos Terminal interaction
     ]
 )
