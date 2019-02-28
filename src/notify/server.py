@@ -20,7 +20,7 @@ import importlib
 
 
 def unpack_length(bytes_content):
-    return struct.unpack('<I')[0]
+    return struct.unpack('<I', bytes_content)[0]
 
 
 class NotificationHandler(StreamRequestHandler):
@@ -30,13 +30,11 @@ class NotificationHandler(StreamRequestHandler):
         content = json.loads(json_content)
 
         terminal = content['terminal']
-        term_mod = importlib.import_module('term.{}'.format(terminal))
-        terminal_app = getattr(term_mod, terminal)
+        term_mod = importlib.import_module('ancypwn.notify.terminal.{}'.format(terminal))
+        terminal_app = getattr(term_mod, terminal)()
 
-        command = '''
-        ancypwn attach
-        {}
-        '''.format(content['exec'])
+        command = '''ancypwn attach
+{}'''.format(content['exec'])
 
         terminal_app.execute(command)
 

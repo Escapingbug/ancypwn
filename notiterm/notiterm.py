@@ -1,4 +1,5 @@
 #!/bin/python
+
 import argparse
 import json
 import struct
@@ -12,7 +13,7 @@ def main():
     parser = argparse.ArgumentParser('fake terminal that connects to outside world')
     parser.add_argument('-e', required=True, help='execute command in outside terminal')
     parser.add_argument('-t', '--terminal', required=True, help='terminal to use (if possible to choose)')
-    parser.add_argument('-p', '--port', required=True, help='port used outside')
+    parser.add_argument('-p', '--port', required=True, type=int, help='port used outside')
 
     args = parser.parse_args()
 
@@ -25,7 +26,7 @@ def main():
     }
     msg_json = json.dumps(msg)
     length = len(msg_json)
-    protocol_msg = pack(length)
+    protocol_msg = pack(length) + msg_json
 
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     sock.connect(('host.docker.internal', args.port))

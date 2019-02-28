@@ -1,5 +1,4 @@
 #!/bin/python
-from __future__ import print_function
 import argparse
 import os
 import os.path
@@ -10,7 +9,9 @@ import socket
 import fcntl
 import platform
 import struct
+import signal
 import subprocess as sp
+from .notify.server import ServerProcess
 
 from distutils.dir_util import mkpath
 
@@ -18,6 +19,8 @@ APPNAME = 'ancypwn'
 APPAUTHOR = 'Anciety'
 
 EXIST_FLAG = '/tmp/ancypwn.id'
+DAEMON_PID = '/tmp/ancypwn.daemon.pid'
+
 SUPPORTED_UBUNTU_VERSION = [
 #    '14.04', Still many issues to be solved (version problems mostly)
     '16.04',
@@ -89,6 +92,11 @@ def parse_args():
         type=str,
         help='The version of ubuntu to open'
     )
+    run_parser.add_argument(
+        '--port',
+        type=int,
+        help='port of outside terminal server, default 15111'
+    )
     run_parser.set_defaults(func=run_pwn)
 
     run_parser.add_argument(
@@ -116,6 +124,7 @@ def parse_args():
     else:
         parser.print_usage()
 
+
 def _get_ip_address(ifname):
     """Gets ip address of some interface
     """
@@ -123,7 +132,6 @@ def _get_ip_address(ifname):
     ip = os.popen(cmd).read().replace("\n","")
 
     return ip
-
 
 
 def _get_terminal_size():
@@ -192,6 +200,8 @@ def run_pwn(args):
     """Runs a pwn thread
     Just sets needed docker arguments and run it
     """
+    port = args.port if not args.port is None else 15111
+
     if not args.ubuntu:
         ubuntu = '16.04'
     else:
@@ -210,6 +220,15 @@ def run_pwn(args):
 
     if os.path.exists(EXIST_FLAG):
         raise AlreadyRuningException('ancypwn is already running, you should either end it  to run again or attach it')
+
+    # run server before dealing with docker
+    child_pid = os.fork()
+    if child_pid == 0:
+        # sub process
+        server = ServerProcess(DAEMON_PID, port, daemon=True)
+        server.start()
+        server.join() # hold it!
+        return
 
     privileged = True if args.priv else False
 
@@ -297,6 +316,13 @@ def end_pwn(args):
         raise NotRunningException('No pwn thread running, corrupted meta info file, deleted')
     conts[0].stop()
     os.remove(EXIST_FLAG)
+
+    with open(DAEMON_PID, 'r') as f:
+        pid = int(f.read())
+
+    # kill server daemon
+    os.kill(pid, signal.SIGTERM)
+    os.remove(DAEMON_PID)
 
 
 def main():
