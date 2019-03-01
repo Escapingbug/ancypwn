@@ -92,6 +92,18 @@ optional arguments:
 
 ```
 
+# Common Problems
+
+## Mac OSX "objc[1895]: +[NSString initialize] may have been in progress in another thread when fork() was called."
+
+Reported by one of the users, I haven't met this situation, thus I have no idea why this is happening.
+
+Solution is set this environment variable:
+
+```
+export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES
+```
+
 # Examples
 
 During CTF games, we usually need a dynamic analysis environment to do all the dynamic stuff, but
