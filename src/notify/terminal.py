@@ -16,7 +16,7 @@ class Terminal(object):
         write text "{}"
     end tell
 end tell
-'''.format(cmd)
+'''.format(repr(cmd)[1:-1].replace('"', '\\"'))
             osascript.run(apple_script)
 
         def terminal_exec(cmd):
@@ -36,6 +36,7 @@ end tell'''.format(cmd)
 
     def execute(self, terminal, command):
         if platform == 'darwin':
+            print('execute:' + command)
             self.mac_execute(terminal, command)
         else:
             raise NotImplemented('os aside from Mac OSX is not yet implemented')
