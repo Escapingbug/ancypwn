@@ -1,5 +1,13 @@
 from setuptools import setup, find_packages
 
+install_requires = [
+    'docker',
+]
+
+import sys
+if sys.platform == 'darwin':
+    install_requires.append('osascript') # apple script support
+
 setup(
     name='ancypwn',
     version='0.3.0',
@@ -12,8 +20,5 @@ setup(
     entry_points={
         'console_scripts': ['ancypwn=ancypwn.ancypwn:main']
     },
-    install_requires=[
-        'docker',
-        'osascript', # apple script
-    ]
+    install_requires=install_requires,
 )
