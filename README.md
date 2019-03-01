@@ -98,30 +98,20 @@ So, we just use the `ancypwn`, and do something like this:
 ```
 # Suppose we have a directory to save all pwnable challenges
 # And we run like this
-# Term 1:
+
 cd pwn
 sudo ancypwn run .
+
 # Now we are in a docker shell, and do something, like playing with the original binary
 # Then we create another terminal, to use gdb to attach it
 # The mounted directory are in `/pwn`
 cd /pwn
 ./example_binary
 
-# Term 2:
-sudo ancypwn attach
-# Now we are in the docker shell which is in the same docker machine of the previous one, but
-# we have a different shell, we can use gdb to attach to the processes now
-gdb
-(gdb) attach PID
-
-# We can also run exploit python script directly, you'd like to write something like `raw_input`
-# to pause the process a little bit and let terminal 2 to use gdb to attach to it.
-# Term 1:
-python exp.py
-
-# Term 2:
-gdb
-(gdb) attach PID
+# In another terminal, you should edit your exploit. Set the pwntools settings like above mentioned.
+# Then run it like normal.
+python exploit.py
+# If you used gdb.attach, it should create a new terminal for you.
 ```
 
 In general, this simple script only provides you a direct way of using docker. All things are done
