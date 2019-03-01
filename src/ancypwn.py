@@ -125,15 +125,6 @@ def parse_args():
         parser.print_usage()
 
 
-def _get_ip_address(ifname):
-    """Gets ip address of some interface
-    """
-    cmd = ("ifconfig %s| grep 'inet ' | awk -F: '{print $1}' | awk '{print $2}'" %str(ifname))
-    ip = os.popen(cmd).read().replace("\n","")
-
-    return ip
-
-
 def _get_terminal_size():
     p = sp.Popen('tput cols', shell=True, stdout=sp.PIPE)
     def _print_warning():
@@ -234,29 +225,9 @@ def run_pwn(args):
 
     # First we need a running thread in the background, to hold existence
     try:
-        ancypwn_display = os.environ.get('ANCYPWN_DISPLAY')
-        if platform.system() == 'Darwin':
-            if ancypwn_display is None:
-                # under macos, we need extra settings if user does't have one
-                try:
-                    ip_addr = _get_ip_address('en0')
-                except Exception:
-                    print('unable to automatic setup DISPLAY environment.')
-                    print('this is needed because of running gui program within docker')
-                    print('please determine your current ip address and setup environment ANCYPWN_DISPLAY as [ip]:0')
-                    print('if you just ignore this, set ANCYPWN_DISPLAY environment to :0 should do')
-                    raise SetupError()
-                os.environ['DISPLAY'] = ip_addr + ':0'
-            else:
-                os.environ['DISPLAY'] = ancypwn_display
-        os.system('xhost +')
-        running_container = container.run(
-            'ancypwn:{}'.format(ubuntu),
-            '/bin/bash',
-            cap_add=['SYS_ADMIN', 'SYS_PTRACE'],
-            detach=True,
-            tty=True,
-            volumes={
+        if platform.system() != 'Darwin':
+            os.system('xhost +')
+            volumes = {
                 os.path.expanduser(args.directory) : {
                     'bind': '/pwn',
                     'mode': 'rw'
@@ -269,7 +240,21 @@ def run_pwn(args):
                     'bind': '/tmp/.X11-unix',
                     'mode': 'rw'
                 }
-            },
+            }
+        else:
+            volumes = {
+                os.path.expanduser(args.directory) : {
+                    'bind': '/pwn',
+                    'mode': 'rw'
+                }
+            }
+        running_container = container.run(
+            'ancypwn:{}'.format(ubuntu),
+            '/bin/bash',
+            cap_add=['SYS_ADMIN', 'SYS_PTRACE'],
+            detach=True,
+            tty=True,
+            volumes=volumes,
             privileged=privileged,
             network_mode='host',
             environment={
