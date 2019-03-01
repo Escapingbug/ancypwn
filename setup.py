@@ -7,13 +7,13 @@ setup(
     url='https://github.com/Escapingbug/ancypwn',
     author='Anciety',
     author_email='anciety512@gmail.com',
-    packages=['ancypwn', 'ancypwn.notify', 'ancypwn.notify.terminal'],
+    packages=['ancypwn', 'ancypwn.notify'],
     package_dir={'ancypwn': 'src'},
     entry_points={
         'console_scripts': ['ancypwn=ancypwn.ancypwn:main']
     },
     install_requires=[
         'docker',
-        'appscript', # for macos Terminal interaction
+        'osascript', # apple script
     ]
 )

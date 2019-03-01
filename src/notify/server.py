@@ -7,11 +7,15 @@ The protocol used:
 
 Json format used:
     {
-        "terminal": "OSXTerminal",
-        "exec": "command"
+        "terminal": "iterm2",
+        "exec": "command",
+        "terminal_exec_command": "...", // (optional) linux user need this, 
+                                        // so we know how to start a new terminal
+                                        // and run command within
     }
 """
 from socketserver import TCPServer, StreamRequestHandler
+from .terminal import Terminal
 import multiprocessing
 import json
 import struct
@@ -30,13 +34,10 @@ class NotificationHandler(StreamRequestHandler):
         content = json.loads(json_content)
 
         terminal = content['terminal']
-        term_mod = importlib.import_module('ancypwn.notify.terminal.{}'.format(terminal))
-        terminal_app = getattr(term_mod, terminal)()
-
+        terminal_exec_command = content.get('terminal_exec_command')
         command = '''ancypwn attach
 {}'''.format(content['exec'])
-
-        terminal_app.execute(command)
+        terminal_app = Terminal(terminal_exec_command).execute(terminal, command)
 
 
 class NotificationServer(object):
