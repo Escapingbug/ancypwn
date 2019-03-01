@@ -9,6 +9,9 @@ class Terminal(object):
 
     def mac_execute(self, terminal, command):
 
+        def _apple_script_string_escape(s):
+            return repr(s)[1:-1].replace('"', '\\"')
+
         def iterm_exec(cmd):
             apple_script = '''tell application "iTerm2"
     tell current session of current window
@@ -16,14 +19,13 @@ class Terminal(object):
         write text "{}"
     end tell
 end tell
-'''.format(repr(cmd)[1:-1].replace('"', '\\"'))
+'''.format(_apple_script_string_escape(cmd))
             osascript.run(apple_script)
 
         def terminal_exec(cmd):
             apple_script = '''tell application "Terminal"
-    do script("/bin/bash -c {}")
-end tell'''.format(cmd)
-            osascript.run(apple_script)
+    do script("{}")
+end tell'''.format(_apple_script_string_escape(cmd))
 
         terminal = terminal.lower()
         if terminal == 'iterm' or terminal == 'iterm2':
@@ -36,7 +38,6 @@ end tell'''.format(cmd)
 
     def execute(self, terminal, command):
         if platform == 'darwin':
-            print('execute:' + command)
             self.mac_execute(terminal, command)
         else:
             raise NotImplemented('os aside from Mac OSX is not yet implemented')
