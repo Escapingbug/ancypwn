@@ -24,6 +24,10 @@ it is welcome to comment an issue.
 
 Currently we are going through a transition phase from in-docker-terminal `lxterminal` to terminal outside. That means currently this support will be gradually added, but not instantely. If you get into any trouble, you can always fall back to pypi version instead of directly use github version. (Yes I'm just tired of managing branches) Pypi version should be working fine for now.
 
+# Notice
+
+Due to some miserable reason, `Python2` support is now officially dropped in this project, outside of docker. Please use `Python3` to install `ancypwn`. `notiterm` script can still be used by `Python2`.
+
 # Installation
 
 ## Linux & MacOS Normal Setup
@@ -40,30 +44,31 @@ Currently we are going through a transition phase from in-docker-terminal `lxter
 
 5. If you see some error message complaining about "pull access denied" or something like that, check if your tag is corret.
 
-## MacOS GUI setup
+## To use `pwntools` `gdb.attach` function
 
-For correctly use GUI programs (particularly, lxterminal, so that you will can use `gdb.attach()` within `pwntools`), MacOS needs to do the following(Linux users using xserver don't need to worry about these):
+### MacOS
 
-1. Install xquartz , you can use `brew cask install xquartz` if you are using homebrew.
-2. open -a XQuartz and set it like this:
-   ![](https://blog-1252049492.cos.ap-hongkong.myqcloud.com/img/Xquartz.png)
-3. Now everything should be done.
+Due to bad network status, I haven't rebuild and push new docker images for now.
 
-### Common Problems
+You can copy `notiterm/notiterm.py` to `ancypwn` accessible directory, then set this in `pwntools`:
 
-#### "ancypwn cannot automatically set DISPLAY"
+```python
+context.terminal = ['python', '/path/to/notiterm.py', '-p', '15111', '-t', 'OSXTerminal', '-e']
+```
 
-1. First, use `ip addr show` or `ifconfig` to see what's your ip address of your using network card
-2. Next, set `ANCYPWN_DISPLAY` environment variable to "[ip]:0", after these, it should be fine. You can use ancypwn and see if `lxterminal` is working.
+After this `gdb.attach` will give you a newly created terminal.
 
-#### "no protocol specified", lxterminal will not run
+### Linux
 
-1. run "xhost +" in your xquartz terminal(bash)
+Linux support for outside terminal is still being written and tested. Currently old method is used under linux.
 
-#### "cannot open display IP:0"
+Set your `pwntools` like this:
 
-1. check that your xquartz is running, we recommand you set it to be opened on login
+```python
+context.terminal = ['lxterminal', '-e']
+```
 
+Note that this will give you an ugly and config-not-savable `lxterminal` only.
 
 # Usage
 
@@ -138,13 +143,18 @@ And for finding the correct image to start, it searches for tags with form `ancy
 
 After start the image, it will run a bash as a background process in the container to hold up the container, and whenever you want shell access, it will exec bash inside the container. This is done by saving started container name in `/tmp/ancypwn.id`.
 
+To support outside terminal, which means to support a terminal runs outside of docker, but works like it is inside, we have a client-server structure. A client called `notiterm.py` is used, and a server
+is run each time you use `ancypwn run`, and the process will be alive until you use `ancypwn end`.
+
+Whenever you use `notiterm.py` to call for a new command run in terminal, this command will be transfered to outside server, and the server will setup a new terminal outside to run `ancypwn attach` and run the command.
+
 ## To Customize
 
 For this reason, if you want to have your own image running with `ancypwn` script, you just need to build your own docker image, and then tag it using name `ancypwn:{ubuntu version number}`.
 
 Actually, the ubuntu version can be anything, it just fires a warning when it is not officially ones. So you can tag a thing like `ancypwn:hello`, and use it like `ancypwn run . --ubuntu hello`.
 
-I will consider add a more specific argument so this "ubuntu" arguments don't seem to strange.
+I will consider add a more specific argument so this "ubuntu" arguments don't seem to be too strange.
 
 # Status
 
