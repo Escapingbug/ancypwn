@@ -53,10 +53,14 @@ Due to bad network status, I haven't rebuild and push new docker images for now.
 You can copy `notiterm/notiterm.py` to `ancypwn` accessible directory, then set this in `pwntools`:
 
 ```python
-context.terminal = ['python', '/path/to/notiterm.py', '-p', '15111', '-t', 'OSXTerminal', '-e']
+context.terminal = ['python', '/path/to/notiterm.py', '-t', 'iterm', '-e']
 ```
 
 After this `gdb.attach` will give you a newly created terminal.
+
+You can change `iterm` to `Terminal` if you are using Terminal.
+
+If you port 15111 is used, or you are using a non-default port when starting `ancypwn`, you can add a `-p`, `[PORT]` to the list.
 
 ### Linux
 
