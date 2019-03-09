@@ -48,19 +48,21 @@ Due to some miserable reason, `Python2` support is now officially dropped in thi
 
 ### MacOS
 
-Due to bad network status, I haven't rebuild and push new docker images for now.
-
-You can copy `notiterm/notiterm.py` to `ancypwn` accessible directory, then set this in `pwntools`:
+Set your pwntools' terminal like this:
 
 ```python
-context.terminal = ['python', '/path/to/notiterm.py', '-t', 'iterm', '-e']
+context.terminal = ['notiterm', '-t', 'iterm', '-e']
 ```
 
 After this `gdb.attach` will give you a newly created terminal.
 
 You can change `iterm` to `Terminal` if you are using Terminal.
 
-If you port 15111 is used, or you are using a non-default port when starting `ancypwn`, you can add a `-p`, `[PORT]` to the list.
+If you port 15111 is used, or you are using a non-default port when starting `ancypwn`, you can add a `-p`, `[PORT]` to the list:
+
+```python
+context.terminal = ['notiiterm', '-t', 'iterm', '-p', '50806', '-e'] # use 50806 port as an example
+```
 
 ### Linux
 
