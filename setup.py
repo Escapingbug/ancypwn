@@ -10,7 +10,7 @@ if sys.platform == 'darwin':
 
 setup(
     name='ancypwn',
-    version='0.3.0',
+    version='0.3.0.1',
     description='Ancypwn docker image manipulation script, to simplify docker pwn environment management',
     url='https://github.com/Escapingbug/ancypwn',
     author='Anciety',
