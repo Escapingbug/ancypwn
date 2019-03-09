@@ -6,3 +6,5 @@ bdist
 dist
 venv
 venv3
+
+ancypwn-docker/*/*.py

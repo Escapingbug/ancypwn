@@ -2,6 +2,7 @@ FROM ubuntu:18.04
 
 MAINTAINER Anciety <anciety512@gmail.com>
 
+
 # Apt packages
 RUN dpkg --add-architecture i386 && apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -qy \
@@ -38,6 +39,8 @@ RUN cd ~/ && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 ENV LANG C.UTF-8
+
+COPY ./notiterm.py /usr/local/bin/notiterm
 
 VOLUME ["/pwn"]
 WORKDIR /pwn
