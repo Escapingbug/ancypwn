@@ -2,6 +2,7 @@ from setuptools import setup, find_packages
 
 install_requires = [
     'docker',
+    'daemonize',
 ]
 
 import sys

@@ -12,6 +12,7 @@ import struct
 import signal
 import subprocess as sp
 from .notify.server import ServerProcess
+from daemonize import Daemonize
 
 from distutils.dir_util import mkpath
 
@@ -224,9 +225,13 @@ def run_pwn(args):
     child_pid = os.fork()
     if child_pid == 0:
         # sub process
-        server = ServerProcess(DAEMON_PID, port, daemon=True)
-        server.start()
-        server.join() # hold it!
+        def start_server():
+            server = ServerProcess(port, daemon=True)
+            server.start()
+            server.join() # hold it!
+
+        daemon = Daemonize(app='ancypwn_server', pid=DAEMON_PID, action=start_server)
+        daemon.start()
         return
 
     privileged = True if args.priv else False

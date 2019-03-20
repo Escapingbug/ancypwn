@@ -53,13 +53,10 @@ class NotificationServer(object):
 
 class ServerProcess(multiprocessing.Process):
 
-    def __init__(self, daemon_pid_path, port, *args, **kwargs):
+    def __init__(self, port, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.daemon_pid_path = daemon_pid_path
         self.port = port
 
     def run(self):
-        with open(self.daemon_pid_path, 'w') as f:
-            f.write(str(self.pid))
         self.server = TCPServer(('', self.port), NotificationHandler)
         self.server.serve_forever();
