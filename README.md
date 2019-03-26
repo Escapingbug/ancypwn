@@ -61,7 +61,7 @@ You can change `iterm` to `Terminal` if you are using Terminal.
 If you port 15111 is used, or you are using a non-default port when starting `ancypwn`, you can add a `-p`, `[PORT]` to the list:
 
 ```python
-context.terminal = ['notiiterm', '-t', 'iterm', '-p', '50806', '-e'] # use 50806 port as an example
+context.terminal = ['notiterm', '-t', 'iterm', '-p', '50806', '-e'] # use 50806 port as an example
 ```
 
 ### Linux
