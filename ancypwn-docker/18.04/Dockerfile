@@ -36,6 +36,13 @@ RUN cd ~/ && \
     git clone https://github.com/pwndbg/pwndbg.git && \
     cd ~/pwndbg/ && ./setup.sh && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+    
+RUN apt install sudo vim
+
+RUN cd ~/ && \
+    git clone https://github.com/TTWShell/legolas-vim.git && \
+    cd legolas-vim && \
+    bash install.sh INIT
 
 ENV LANG C.UTF-8
 
