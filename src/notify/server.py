@@ -54,9 +54,9 @@ class NotificationServer(object):
 class ServerProcess(multiprocessing.Process):
 
     def __init__(self, port, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+        super(ServerProcess,self).__init__(*args, **kwargs)
         self.port = port
 
     def run(self):
         self.server = TCPServer(('', self.port), NotificationHandler)
-        self.server.serve_forever();
+        self.server.serve_forever()

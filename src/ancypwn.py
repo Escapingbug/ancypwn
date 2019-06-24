@@ -226,7 +226,7 @@ def run_pwn(args):
     if child_pid == 0:
         # sub process
         def start_server():
-            server = ServerProcess(port, daemon=True)
+            server = ServerProcess(port)
             server.start()
             server.join() # hold it!
 
