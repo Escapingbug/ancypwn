@@ -1,6 +1,5 @@
 import os
 from sys import platform
-import osascript
 
 class Terminal(object):
 
@@ -8,6 +7,7 @@ class Terminal(object):
         self.terminal_exec_command = terminal_exec_command
 
     def mac_execute(self, terminal, command):
+        import osascript
 
         def _apple_script_string_escape(s):
             return repr(s)[1:-1].replace('"', '\\"')
