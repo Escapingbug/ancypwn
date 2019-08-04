@@ -1,9 +1,11 @@
+import os
+import pathlib
+
 def _make_sure_directory(path):
     directory = os.path.dirname(path)
 
     if not os.path.exists(directory):
         pathlib.Path(directory).mkdir(parents=True, exist_ok=True)
-
 
 
 def _read_container_name(path):
