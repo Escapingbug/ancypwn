@@ -25,7 +25,7 @@ SUPPORTED_UBUNTU_VERSION = [
 system = platform.system().lower()
 if 'linux' in system or 'darwin' in system:
     BACKEND_DEFAULT_CONFIG = {
-        'name': 'direct'
+        'name': 'unix'
     }
     if 'linux' in system:
         install_plugin_name = 'linux'
