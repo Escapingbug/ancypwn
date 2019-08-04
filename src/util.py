@@ -1,6 +1,11 @@
 import os
 import pathlib
 
+
+class NotRunningException(Exception):
+    pass
+
+
 def _make_sure_directory(path):
     directory = os.path.dirname(path)
 
