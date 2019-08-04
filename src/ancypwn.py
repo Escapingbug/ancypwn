@@ -160,7 +160,6 @@ def run(directory, priv, tag, image, command):
 @click.command()
 @click.option('-c', '--command', default='', help='command to execute when attach')
 def attach(command):
-    print('attaching, command: {}'.format(command))
     backend.attach(command)
 
 @click.command()
