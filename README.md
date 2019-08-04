@@ -1,5 +1,7 @@
 # ancypwn
 
+**WARNING!! Because of lacking of time before DC 27, all pip install is not currently working, I haven't uploaded them. They will be uploaded once DC 27 is over.**
+
 Ancypwn is your one-key-to-all CTF pwnable challenges environment helper.
 
 It uses docker to manage the tools you might need, so you have separete environment, and you do all the debugging with the shared folder.
