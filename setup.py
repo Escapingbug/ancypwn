@@ -1,25 +1,21 @@
 from setuptools import setup, find_packages
 
 install_requires = [
-    'docker',
-    'daemonize',
+    'click',
+    'appdirs',
 ]
-
-import sys
-if sys.platform == 'darwin':
-    install_requires.append('osascript') # apple script support
 
 setup(
     name='ancypwn',
-    version='0.3.1',
+    version='1.0.0',
     description='Ancypwn docker image manipulation script, to simplify docker pwn environment management',
     url='https://github.com/Escapingbug/ancypwn',
     author='Anciety',
-    author_email='anciety512@gmail.com',
-    packages=['ancypwn', 'ancypwn.notify'],
+    author_email='anciety@pku.edu.cn',
+    packages=['ancypwn'],
     package_dir={'ancypwn': 'src'},
     entry_points={
-        'console_scripts': ['ancypwn=ancypwn.ancypwn:main']
+        'console_scripts': ['ancypwn=ancypwn.ancypwn:entry']
     },
     install_requires=install_requires,
 )
