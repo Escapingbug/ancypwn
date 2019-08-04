@@ -17,9 +17,9 @@ else
     sudo_cmd="sudo"
 fi
 
-cp ./notiterm/notiterm.py ./ancypwn-docker/16.04/
-cp ./notiterm/notiterm.py ./ancypwn-docker/18.04/
-cp ./notiterm/notiterm.py ./ancypwn-docker/18.10/
+cp ./ancypwn-terminal/ancyterm.py ./ancypwn-docker/16.04/
+cp ./ancypwn-terminal/ancyterm.py ./ancypwn-docker/18.04/
+cp ./ancypwn-terminal/ancyterm.py ./ancypwn-docker/18.10/
 
 # build default
 echo "Building 16.04 docker image..."

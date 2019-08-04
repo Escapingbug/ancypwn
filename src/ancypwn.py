@@ -34,8 +34,9 @@ if 'linux' in system or 'darwin' in system:
 else:
     # windows
     BACKEND_DEFAULT_CONFIG = {
-        'name': 'wsl2',
-        'url': 'tcp://localhost:11511'
+        'name': 'windows_remote',
+        'url': 'tcp://localhost:11511',
+        'shared_folder_prefix': '/mnt/'
     }
     install_plugin_name = 'windows'
 
