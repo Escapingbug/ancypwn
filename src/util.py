@@ -10,7 +10,7 @@ def _make_sure_directory(path):
 
 def _read_container_name(path):
     if not os.path.exists(path):
-        raise NotRunningException('Ancypwn is not running yet')
+        raise Exception('Ancypwn is not running yet')
 
     container_name = None
     with open(path, 'r') as f:
