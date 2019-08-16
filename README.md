@@ -4,7 +4,7 @@ Ancypwn is your one-key-to-all CTF pwnable challenges environment helper.
 
 It uses docker to manage the tools you might need, so you have separete environment, and you do all the debugging with the shared folder.
 
-(all official pips have been uploaded, unjoy.)
+(all official pips have been uploaded, enjoy.)
 
 ## Provided tools
 
