@@ -73,6 +73,9 @@ You can do:
 * `ancypwn end`: stops the docker
 * `ancypwn attach`: ancypwn run may already be done, without ending, you can attach to the previously run instance, then you will be passed to the docker shell.
 
+Internally, `ancypwn` command can be seen as just a docker commandline runner, so you don't need to remember the sophisticated docker arguments.
+You can also run your own docker image, by using `ancypwn run --image YOUR_IMAGE --tag YOUR_TAG`.
+
 ## To use `pwntools` `gdb.attach` function
 
 What the best of `ancypwn` is its supporting of popping up terminal window and runs command inside. This allows the fluent experience of using pwntools' `gdb.attach` function to debug target.
