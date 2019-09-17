@@ -22,6 +22,7 @@ RUN dpkg --add-architecture i386 && apt-get update && \
     socat \
     netcat \
     ruby \
+    ruby-dev \
     lxterminal && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
@@ -29,7 +30,7 @@ RUN dpkg --add-architecture i386 && apt-get update && \
 
 # python/ruby packages & gdb-plugin
 RUN pip install --no-cache-dir pwntools ropper ancypatch && \
-    gem install one_gadget && \
+    gem install one_gadget seccomp-tools && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # git installaing package

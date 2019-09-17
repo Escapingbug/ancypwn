@@ -16,6 +16,7 @@ It uses docker to manage the tools you might need, so you have separete environm
 * Ropper
 * ROPGadgets
 * one_gadget
+* seccomp-tools
 
 ## Installation
 
@@ -65,7 +66,7 @@ You can do:
 
 ## To use `pwntools` `gdb.attach` function
 
-What is best of `ancypwn` is its supporting of popping up terminal window and runs command inside. This allows the fluent experience of using pwntools' `gdb.attach` function to debug target.
+What the best of `ancypwn` is its supporting of popping up terminal window and runs command inside. This allows the fluent experience of using pwntools' `gdb.attach` function to debug target.
 
 To use this, you need to set up your terminal like this:
 
