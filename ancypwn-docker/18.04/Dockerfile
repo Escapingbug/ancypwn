@@ -42,6 +42,7 @@ RUN cd ~/ && \
 ENV LANG C.UTF-8
 
 COPY ./ancyterm.py /usr/local/bin/ancyterm
+RUN chmod +x /usr/local/bin/ancyterm
 
 VOLUME ["/pwn"]
 WORKDIR /pwn
