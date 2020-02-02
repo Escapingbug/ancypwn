@@ -24,7 +24,7 @@ class NotificationHandler(StreamRequestHandler):
         if content['exec'] != '':
             command = 'ancypwn attach -c \"{}\"'.format(content['exec'])
         else:
-            command = 'ancywn attach'
+            command = 'ancypwn attach'
         realname = 'ancypwn_terminal_{}'.format(terminal)
         mod = plugin_module_import(realname)
         mod.run(command)
