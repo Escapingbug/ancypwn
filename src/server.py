@@ -22,7 +22,7 @@ class NotificationHandler(StreamRequestHandler):
         content = json.loads(json_content)
         terminal = content['terminal']
         if content['exec'] != '':
-            command = 'ancypwn attach -c \'{}\''.format(content['exec'])
+            command = 'ancypwn attach -c \"{}\"'.format(content['exec'])
         else:
             command = 'ancywn attach'
         realname = 'ancypwn_terminal_{}'.format(terminal)
