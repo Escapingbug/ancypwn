@@ -35,8 +35,7 @@ else:
     # windows
     BACKEND_DEFAULT_CONFIG = {
         'name': 'windows_remote',
-        'url': 'tcp://localhost:11511',
-        'shared_folder_prefix': '/mnt/'
+        'url': 'tcp://localhost:2375',
     }
     install_plugin_name = 'windows'
 
