@@ -7,7 +7,7 @@ install_requires = [
 
 setup(
     name='ancypwn',
-    version='1.0.1',
+    version='1.0.2',
     description='Ancypwn docker image manipulation script, to simplify docker pwn environment management',
     url='https://github.com/Escapingbug/ancypwn',
     author='Anciety',
