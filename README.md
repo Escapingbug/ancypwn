@@ -26,8 +26,8 @@ Ancypwn is now plugin based, choose your own plugin or write a new plugin if you
 
 You will need at least 4 parts to have a working environment (apart from docker).
 
-0. A ancypwn docker image, and is properly tagged as ancypwn:VERSION, VERSION is one of "16.04", "18.04" or "18.10", each represent a corresponding ubuntu version.
-1. ancypwn launcher (`pip install ancypwn`)
+0. A ancypwn docker image, and is properly tagged as ancypwn:VERSION, VERSION is one of "16.04", "18.04", "20.04" or "18.10", each represent a corresponding ubuntu version.
+1. ancypwn launcher (`pip3 install ancypwn`)
 2. a backend: backend provides ability to listen incoming request to pop up a terminal window, then asks terminal plugin to do it and does different docker container launching strategy (like remote support).
 3. a terminal plugin: this one handles terminal poping up
 
