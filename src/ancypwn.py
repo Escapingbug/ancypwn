@@ -10,9 +10,8 @@ import pathlib
 APPNAME = 'ancypwn'
 APPAUTHOR = 'Anciety'
 
-
-CONFIG_DIR = appdirs.user_data_dir(APPNAME, APPAUTHOR)
-CONFIG_FILE_PATH = os.path.join(CONFIG_DIR, 'config.json')
+CONFIG_DIR = appdirs.user_data_dir(APPNAME, APPAUTHOR) #获取当前目录
+CONFIG_FILE_PATH = os.path.join(CONFIG_DIR, 'config.json') #找到config.json文件
 
 
 SUPPORTED_UBUNTU_VERSION = [
@@ -22,8 +21,8 @@ SUPPORTED_UBUNTU_VERSION = [
 ]
 
 
-system = platform.system().lower()
-if 'linux' in system or 'darwin' in system:
+system = platform.system().lower() 
+if 'linux' in system or 'darwin' in system: #根据不同的平台作出不同选择
     BACKEND_DEFAULT_CONFIG = {
         'name': 'unix'
     }
@@ -40,7 +39,7 @@ else:
     install_plugin_name = 'windows'
 
 
-DEFAULT_CONFIG = {
+DEFAULT_CONFIG = { # 端口，环境，插件
     'terminal_port': 15111,
     'backend': BACKEND_DEFAULT_CONFIG,
     # install plugin name
@@ -58,7 +57,7 @@ class PluginNotFoundError(Exception):
 
 def plugin_module_import(name):
     try:
-        return importlib.import_module(name)
+        return importlib.import_module(name) 
     except ModuleNotFoundError as e:
         prompt = 'plugin {} not found, please install it first.\n'.format(name)
         prompt += 'try follwing:\n\tpip3 install {}'.format(name)
@@ -70,17 +69,17 @@ class InstallPlugin:
         name = config['install_plugin']
         realname = 'ancypwn_install_{}'.format(name)
         self.config = config
-        self.mod = plugin_module_import(realname)
+        self.mod = plugin_module_import(realname) #这里加载一个mod
 
     def install(self):
-        self.mod.install(self.config)
+        self.mod.install(self.config) #x向得到的模块里面install?
 
 
 class Backend:
     def __init__(self, config):
-        realname = 'ancypwn_backend_{}'.format(config['backend']['name'])
+        realname = 'ancypwn_backend_{}'.format(config['backend']['name']) #macos下 ancypwn_backend_unix
         self.config = config
-        self.mod = plugin_module_import(realname)
+        self.mod = plugin_module_import(realname) #这里导入的模块好似本机还没有
 
     def run(self, directory=None, priv=None, image=None, tag=None, command=None):
         if directory is None or \
@@ -91,7 +90,7 @@ class Backend:
             # this should never hapen
             raise Exception('backend run argument incorrect!')
         image_name = '{}:{}'.format(image, tag)
-        self.mod.run(
+        self.mod.run(  # ancypwn_backend_unix 执行命令
             config=self.config,
             priv=priv,
             image_name=image_name,
