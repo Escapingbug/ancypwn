@@ -36,17 +36,15 @@ Backends have the name pattern: `ancypwn-backend-*`, while terminal plugin has t
 So you need:
 
 ```
-# download images, and tag them properly
-docker pull auxy233/ancypwn:16.04
-docker pull auxy233/ancypwn:18.04
-docker pull auxy233/ancypwn:18.10
-docker image tag auxy233/ancypwn:16.04 ancypwn:16.04
-docker image tag auxy233/ancypwn:18.04 ancypwn:18.04
-docker image tag auxy233/ancypwn:18.10 ancypwn:18.10
+# build images
+docker build -t ancypwn:20.04 .
+docker build -t ancypwn:18.04 .
+docker build -t ancypwn:18.10 .
+docker build -t ancypwn:16.04 .
 
 pip3 install ancypwn
-# pip3 install ancypwn-backend-* (choose your backend, and install it)
-# pip3 install ancypwn-terminal-* (choose your terminal, and install it)
+# install ancypwn-backend-* (choose your backend, and install it)
+# install ancypwn-terminal-* (choose your terminal, and install it)
 ```
 
 ### Choose your backend
@@ -61,7 +59,7 @@ Current official backends:
 Current official terminals:
 
 - [ancypwn-terminal-alacritty](https://github.com/Escapingbug/ancypwn-terminal-alacritty)
-- [ancypwn-terminal-iterm2](https://github.com/Escapingbug/ancypwn-terminal-iterm2)
+- [ancypwn-terminal-iterm2](https://github.com/shizhongpwn/ancypwn-terminal-iterm2.git)
 
 ## Usage
 
@@ -156,3 +154,4 @@ Current supported ubuntu version:
 * 18.10
 * 18.04
 * 16.04
+* 20.04
