@@ -1,6 +1,6 @@
 FROM ubuntu:20.04
 
-MAINTAINER Anciety <anciety512@gmail.com>
+MAINTAINER xibai <kirito_xibai@qq.com>
 
 # Apt packages
 RUN dpkg --add-architecture i386 && apt-get update && \
