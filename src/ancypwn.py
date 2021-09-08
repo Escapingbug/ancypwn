@@ -22,7 +22,7 @@ SUPPORTED_UBUNTU_VERSION = [
 ]
 
 
-system = platform.system().lower() 
+system = platform.system().lower()
 if 'linux' in system or 'darwin' in system: 
     BACKEND_DEFAULT_CONFIG = {
         'name': 'unix'

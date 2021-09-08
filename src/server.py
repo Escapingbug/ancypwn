@@ -5,8 +5,6 @@ import struct
 import importlib
 from socketserver import TCPServer, StreamRequestHandler
 
-class PluginNotFoundError(Exception):
-    pass
 
 def plugin_module_import(name):
     try:
