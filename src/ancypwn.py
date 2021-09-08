@@ -10,19 +10,20 @@ import pathlib
 APPNAME = 'ancypwn'
 APPAUTHOR = 'Anciety'
 
-CONFIG_DIR = appdirs.user_data_dir(APPNAME, APPAUTHOR) #获取当前目录
-CONFIG_FILE_PATH = os.path.join(CONFIG_DIR, 'config.json') #找到config.json文件
+CONFIG_DIR = appdirs.user_data_dir(APPNAME, APPAUTHOR) 
+CONFIG_FILE_PATH = os.path.join(CONFIG_DIR, 'config.json') 
 
 
 SUPPORTED_UBUNTU_VERSION = [
     '16.04',
     '18.04',
-    '18.10',
+    '18.10', # This is not well maintained because it is not commonly used 
+    '20.04',
 ]
 
 
 system = platform.system().lower() 
-if 'linux' in system or 'darwin' in system: #根据不同的平台作出不同选择
+if 'linux' in system or 'darwin' in system: 
     BACKEND_DEFAULT_CONFIG = {
         'name': 'unix'
     }
@@ -39,7 +40,7 @@ else:
     install_plugin_name = 'windows'
 
 
-DEFAULT_CONFIG = { # 端口，环境，插件
+DEFAULT_CONFIG = { 
     'terminal_port': 15111,
     'backend': BACKEND_DEFAULT_CONFIG,
     # install plugin name
@@ -69,17 +70,17 @@ class InstallPlugin:
         name = config['install_plugin']
         realname = 'ancypwn_install_{}'.format(name)
         self.config = config
-        self.mod = plugin_module_import(realname) #这里加载一个mod
+        self.mod = plugin_module_import(realname) 
 
     def install(self):
-        self.mod.install(self.config) #x向得到的模块里面install?
+        self.mod.install(self.config) 
 
 
 class Backend:
     def __init__(self, config):
-        realname = 'ancypwn_backend_{}'.format(config['backend']['name']) #macos下 ancypwn_backend_unix
+        realname = 'ancypwn_backend_{}'.format(config['backend']['name']) #macos ancypwn_backend_unix
         self.config = config
-        self.mod = plugin_module_import(realname) #这里导入的模块好似本机还没有
+        self.mod = plugin_module_import(realname) 
 
     def run(self, directory=None, priv=None, image=None, tag=None, command=None):
         if directory is None or \
@@ -90,7 +91,7 @@ class Backend:
             # this should never hapen
             raise Exception('backend run argument incorrect!')
         image_name = '{}:{}'.format(image, tag)
-        self.mod.run(  # ancypwn_backend_unix 执行命令
+        self.mod.run(  
             config=self.config,
             priv=priv,
             image_name=image_name,
