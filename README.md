@@ -43,8 +43,8 @@ docker build -t ancypwn:18.10 .
 docker build -t ancypwn:16.04 .
 
 pip3 install ancypwn
-# install ancypwn-backend-* (choose your backend, and install it)
-# install ancypwn-terminal-* (choose your terminal, and install it)
+# pip3 install ancypwn-backend-* (choose your backend, and install it)
+# pip3 install ancypwn-terminal-* (choose your terminal, and install it)
 ```
 
 ### Choose your backend
