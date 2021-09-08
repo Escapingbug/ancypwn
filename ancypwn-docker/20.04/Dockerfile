@@ -45,6 +45,13 @@ RUN cd ~/ && \
     cd ~/pwndbg/ && ./setup.sh && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
+RUN cd ~/ && \
+    git clone https://github.com/scwuaptx/Pwngdb.git && \
+    cp ~/Pwngdb/.gdbinit ~/ && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
+    sed -i '1d' ~/.gdbinit && \
+    sed -i '1c source ~/pwndbg/gdbinit.py' ~/.gdbinit
+
 ENV LANG C.UTF-8
 
 COPY ./ancyterm.py /usr/local/bin/ancyterm
