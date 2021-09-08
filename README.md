@@ -59,7 +59,7 @@ Current official backends:
 Current official terminals:
 
 - [ancypwn-terminal-alacritty](https://github.com/Escapingbug/ancypwn-terminal-alacritty)
-- [ancypwn-terminal-iterm2](https://github.com/shizhongpwn/ancypwn-terminal-iterm2.git)
+- [ancypwn-terminal-iterm2](https://github.com/Escapingbug/ancypwn-terminal-iterm2)
 
 ## Usage
 
