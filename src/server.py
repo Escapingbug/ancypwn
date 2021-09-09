@@ -20,7 +20,7 @@ class NotificationHandler(StreamRequestHandler):
         length = struct.unpack('<I', self.request.recv(4))[0] 
         json_content = self.request.recv(length) 
         content = json.loads(json_content)
-        terminal = content['terminal'] 
+        terminal = content['terminal']
         if content['exec'] != '': 
             command = 'ancypwn attach -c \'{}\''.format(content['exec'])
         else:
