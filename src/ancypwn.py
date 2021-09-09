@@ -10,20 +10,20 @@ import pathlib
 APPNAME = 'ancypwn'
 APPAUTHOR = 'Anciety'
 
-
-CONFIG_DIR = appdirs.user_data_dir(APPNAME, APPAUTHOR)
-CONFIG_FILE_PATH = os.path.join(CONFIG_DIR, 'config.json')
+CONFIG_DIR = appdirs.user_data_dir(APPNAME, APPAUTHOR) 
+CONFIG_FILE_PATH = os.path.join(CONFIG_DIR, 'config.json') 
 
 
 SUPPORTED_UBUNTU_VERSION = [
     '16.04',
     '18.04',
-    '18.10',
+    '18.10', # This is not well maintained because it is not commonly used 
+    '20.04',
 ]
 
 
 system = platform.system().lower()
-if 'linux' in system or 'darwin' in system:
+if 'linux' in system or 'darwin' in system: 
     BACKEND_DEFAULT_CONFIG = {
         'name': 'unix'
     }
@@ -40,7 +40,7 @@ else:
     install_plugin_name = 'windows'
 
 
-DEFAULT_CONFIG = {
+DEFAULT_CONFIG = { 
     'terminal_port': 15111,
     'backend': BACKEND_DEFAULT_CONFIG,
     # install plugin name
@@ -58,7 +58,7 @@ class PluginNotFoundError(Exception):
 
 def plugin_module_import(name):
     try:
-        return importlib.import_module(name)
+        return importlib.import_module(name) 
     except ModuleNotFoundError as e:
         prompt = 'plugin {} not found, please install it first.\n'.format(name)
         prompt += 'try follwing:\n\tpip3 install {}'.format(name)
@@ -70,17 +70,17 @@ class InstallPlugin:
         name = config['install_plugin']
         realname = 'ancypwn_install_{}'.format(name)
         self.config = config
-        self.mod = plugin_module_import(realname)
+        self.mod = plugin_module_import(realname) 
 
     def install(self):
-        self.mod.install(self.config)
+        self.mod.install(self.config) 
 
 
 class Backend:
     def __init__(self, config):
-        realname = 'ancypwn_backend_{}'.format(config['backend']['name'])
+        realname = 'ancypwn_backend_{}'.format(config['backend']['name']) #macos ancypwn_backend_unix
         self.config = config
-        self.mod = plugin_module_import(realname)
+        self.mod = plugin_module_import(realname) 
 
     def run(self, directory=None, priv=None, image=None, tag=None, command=None):
         if directory is None or \
@@ -91,7 +91,7 @@ class Backend:
             # this should never hapen
             raise Exception('backend run argument incorrect!')
         image_name = '{}:{}'.format(image, tag)
-        self.mod.run(
+        self.mod.run(  
             config=self.config,
             priv=priv,
             image_name=image_name,

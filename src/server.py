@@ -17,17 +17,17 @@ def plugin_module_import(name):
 
 class NotificationHandler(StreamRequestHandler):
     def handle(self):
-        length = struct.unpack('<I', self.request.recv(4))[0]
-        json_content = self.request.recv(length)
+        length = struct.unpack('<I', self.request.recv(4))[0] 
+        json_content = self.request.recv(length) 
         content = json.loads(json_content)
         terminal = content['terminal']
-        if content['exec'] != '':
+        if content['exec'] != '': 
             command = 'ancypwn attach -c \'{}\''.format(content['exec'])
         else:
             command = 'ancypwn attach'
         realname = 'ancypwn_terminal_{}'.format(terminal)
-        mod = plugin_module_import(realname)
-        mod.run(command)
+        mod = plugin_module_import(realname) 
+        mod.run(command) 
 
 
 class ServerProcess(multiprocessing.Process):

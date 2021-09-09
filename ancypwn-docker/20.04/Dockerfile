@@ -1,27 +1,29 @@
-FROM ubuntu:18.04
+FROM ubuntu:20.04
 
-MAINTAINER Anciety <anciety512@gmail.com>
-
+MAINTAINER xibai <kirito_xibai@qq.com>
 
 # Apt packages
-RUN dpkg --add-architecture i386 && \
-    apt-get update && \
-    apt-get -y install sudo wget cmake curl gcc socat\
-    software-properties-common && \
-    wget http://archive.ubuntu.com/ubuntu/pool/main/k/keyutils/libkeyutils1_1.5.9-9.2ubuntu2_amd64.deb && \
-    dpkg -i libkeyutils1_1.5.9-9.2ubuntu2_amd64.deb && \
+RUN dpkg --add-architecture i386 && apt-get update && \
+    apt-get -y install software-properties-common && \
     add-apt-repository ppa:brightbox/ruby-ng && \
+    add-apt-repository ppa:deadsnakes/ppa && \
     apt-get update && \
     apt-get purge --auto-remove ruby && \
     DEBIAN_FRONTEND=noninteractive apt-get install -qy \
     git nasm python3 \
-    build-essential \
+    build-essential fakeroot dpkg-dev libcurl4-openssl-dev\
     python3-dev python3-pip python3-setuptools \
     libc6-dbg \
     libc6-dbg:i386 \
     gcc-multilib \
     gdb-multiarch \
+    gcc \
+    wget \
+    curl \
     glibc-source \
+    cmake \
+    socat \
+    sudo \
     netcat \
     ruby2.6 \
     ruby2.6-dev \
@@ -31,9 +33,9 @@ RUN dpkg --add-architecture i386 && \
     cd ~ && tar -xvf /usr/src/glibc/glib*.tar.xz
 
 # python/ruby packages & gdb-plugin
-RUN wget https://bootstrap.pypa.io/pip/3.5/get-pip.py && \
+RUN wget https://bootstrap.pypa.io/pip/get-pip.py && \
     python3 get-pip.py && \
-    pip install --no-cache-dir LibcSearcher pwntools ropper ancypatch && \
+    pip3 install --no-cache-dir pwntools ropper ancypatch && \
     gem install one_gadget seccomp-tools && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
@@ -48,7 +50,7 @@ RUN cd ~/ && \
     cp ~/Pwngdb/.gdbinit ~/ && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
     sed -i '1d' ~/.gdbinit && \
-    sed -i '1c source ~/pwndbg/gdbinit.py' ~/.gdbinit*
+    sed -i '1c source ~/pwndbg/gdbinit.py' ~/.gdbinit
 
 ENV LANG C.UTF-8
 
